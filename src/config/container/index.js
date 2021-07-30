@@ -28,14 +28,6 @@ const setupContainer = () => {
     },
     formatName: containerNameFormatter('DataAccess')
   });
-
-  container.loadModules(['../../database/models/**/*.js'], {
-    cwd: __dirname,
-    resolverOptions: {
-      register: awilix.asValue
-    },
-    formatName: containerNameFormatter('Model')
-  });
 };
 
 module.exports = {

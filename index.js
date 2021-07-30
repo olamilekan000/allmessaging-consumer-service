@@ -4,12 +4,10 @@ require('dotenv').config();
 
 const environmentConfig = require('./src/config/environment');
 const logger = require('./src/config/winston');
-const boostrapMongoose = require('./src/database/mongodb');
 const server = require('./src/server');
 
 (async () => {
   try {
-    await boostrapMongoose();
     const app = server();
     const { port } = environmentConfig();
     app.listen(port, () =>
