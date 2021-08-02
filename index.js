@@ -2,17 +2,13 @@
 /* eslint-disable no-useless-catch */
 require('dotenv').config();
 
-const environmentConfig = require('./src/config/environment');
-const logger = require('./src/config/winston');
-const server = require('./src/server');
+const { setupContainer } = require('./src/config/container');
+const { setupBroker } = require('./src/config/queue')();
 
 (async () => {
   try {
-    const app = server();
-    const { port } = environmentConfig();
-    app.listen(port, () =>
-      logger.log('info', `app now listening on ${port} 🚀🚀🚀`)
-    );
+    setupContainer();
+    await setupBroker();
   } catch (e) {
     throw e;
   }
