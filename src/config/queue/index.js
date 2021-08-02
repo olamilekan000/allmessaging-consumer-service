@@ -58,7 +58,7 @@ const messageBroker = () => {
                 if (err2) {
                   throw err2;
                 }
-                // channel.bindQueue(q.queue, binding, '');
+                channel.bindQueue(queue.queue, binding, '');
                 consumeMessage(queue, channel);
               }
             );
