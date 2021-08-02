@@ -17,6 +17,18 @@ const {
 const messageBroker = () => {
   const opt = { credentials: amqp.credentials.plain(userName, password) };
 
+  const consumeMessage = async (queue, channel) => {
+    switch (queue.queue) {
+      case QUEUE.REPORT_SERVICE_AUDIT_TRAIL_QUEUE:
+        const { createAuditTrail } = container.resolve('AuditTrailConsumer');
+        await channel.consume(queue.queue, createAuditTrail(channel));
+        break;
+
+      default:
+        break;
+    }
+  };
+
   const setupBroker = () =>
     new Promise((resolve, reject) => {
       amqp.connect(url, opt, (connErr, conn) => {
@@ -57,28 +69,6 @@ const messageBroker = () => {
         });
       });
     });
-
-  const consumeMessage = async (queue, channel) => {
-    switch (queue.queue) {
-      case QUEUE.REPORT_SERVICE_AUDIT_TRAIL_QUEUE:
-        const { createAuditTrail } = container.resolve('AuditTrailConsumer');
-        channel.consume(queue.queue, createAuditTrail(channel));
-        break;
-
-      // case QUEUE.REPORT_SERVICE_AUDIT_TRAIL_QUEUE:
-      //   const auditTrail = container.resolve('AuditTrailConsumer')
-      // break;
-
-      default:
-        break;
-    }
-
-    // console.log(ch)
-    // console.log(container.inspect())
-
-    // await ch.sendToQueue(queueName, Buffer.from(data));
-    // logger.log('info', `[x] Published to queue %s ${data}`);
-  };
 
   return {
     setupBroker,
